@@ -20,15 +20,16 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 /**
- * @author mtodorov
- */
-public class PomFilenameFilter implements FilenameFilter
+* @author mtodorov
+*/
+public class ArtifactFilter
+        implements FilenameFilter
 {
 
     @Override
     public boolean accept(File dir, String name)
     {
-        return name.endsWith(".pom");
+        return !name.contains("pom") && !name.contains("backup");
     }
 
 }

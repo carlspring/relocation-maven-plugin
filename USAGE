@@ -4,10 +4,17 @@ Example usage
 
 Relocating a single artifact
 ----------------------------
-    mvn relocate:relocate-single -DrepositoryBaseDir=/path/to/repository  \
-                                 -DoriginalGAV=com.foo.bar:zoo:1.1 \
-                                 -DrelocationGAV=com.foo.bars:zoo:1.1 \
-                                 -DrelocationMessage="The artifact has been relocated from com.foo.bar:zoo:1.1 to com.foo.bars:zoo:1.1."
+    mvn relocate:single -DrepositoryBaseDir=/path/to/repository  \
+                        -DoriginalGAV=com.foo.bar:zoo:1.1 \
+                        -DrelocationGAV=com.foo.bars:zoo:1.1 \
+                        -DrelocationMessage="The artifact has been relocated from com.foo.bar:zoo:1.1 to com.foo.bars:zoo:1.1."
+
+Relocating an artifact recursively
+----------------------------------
+    mvn relocate:recursive -DrepositoryBaseDir=/path/to/repository  \
+                           -DoriginalGAV=com.foo.bar:zoo \
+                           -DrelocationGAV=com.foo.bars:zoo \
+                           -DrelocationMessage="The artifact has been relocated from com.foo.bar:zoo to com.foo.bars:zoo."
 
 
 Notes

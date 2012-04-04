@@ -31,7 +31,6 @@
     </developers>
 
     <properties>
-        <version.derby>10.8.2.2</version.derby>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

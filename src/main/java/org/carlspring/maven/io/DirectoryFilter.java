@@ -17,18 +17,19 @@ package org.carlspring.maven.io;
  */
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileFilter;
 
 /**
- * @author mtodorov
- */
-public class PomFilenameFilter implements FilenameFilter
+* @author mtodorov
+*/
+public class DirectoryFilter
+        implements FileFilter
 {
 
     @Override
-    public boolean accept(File dir, String name)
+    public boolean accept(File file)
     {
-        return name.endsWith(".pom");
+        return file.isDirectory();
     }
 
 }

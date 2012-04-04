@@ -16,11 +16,16 @@ package org.carlspring.maven.relocation;
  * limitations under the License.
  */
 
+import org.apache.maven.model.Model;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.carlspring.maven.io.DirectoryFilter;
+
+import java.io.File;
+import java.io.FileFilter;
 
 /**
- * @goal            relocate-recursive
+ * @goal            recursive
  * @requiresProject false
  * @author          mtodorov
  */
@@ -33,7 +38,56 @@ public class RelocateRecursiveMojo
     public void execute()
             throws MojoExecutionException, MojoFailureException
     {
+        relocateRecursively();
+    }
 
+    private void relocateRecursively()
+            throws MojoFailureException
+    {
+        File basedirForArtifacts = getOriginalArtifactBasedir().getAbsoluteFile();
+
+        FileFilter directoryFilter = new DirectoryFilter();
+
+        final File[] artifactDirectories = basedirForArtifacts.listFiles(directoryFilter);
+
+        for (File artifactDirectory : artifactDirectories)
+        {
+            // The version is the same as the directory's name:
+            final String version = artifactDirectory.getName();
+            setVersion(version);
+            setRelocationVersion(version);
+            relocate();
+        }
+    }
+
+    public void relocate()
+            throws MojoFailureException
+    {
+        try
+        {
+            File artifactBasedir = getOriginalArtifactBasedir().getAbsoluteFile();
+
+            File pomFile = new File(artifactBasedir, getPomFile(artifactBasedir));
+
+            backupFiles(artifactBasedir);
+
+            Model originalModel = getOriginalModel(pomFile);
+
+            generateRelocationModel(originalModel, pomFile);
+
+            relocateArtifacts(artifactBasedir);
+
+            generateModelForRelocatedArtifacts(originalModel, new File(getRelocatedArtifactBasedir(),
+                                                                       getRelocationArtifactId() + "-" +
+                                                                       getRelocationVersion() +".pom"));
+            // Note: At this point, the originalModel is changed with the relocation info.
+
+            removeOriginalArtifacts();
+        }
+        catch (Exception e)
+        {
+             throw new MojoFailureException(e.getMessage(), e);
+        }
     }
 
 }

@@ -19,15 +19,11 @@ package org.carlspring.maven.relocation;
 import org.apache.maven.model.Model;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.carlspring.maven.model.ModelParser;
-import org.carlspring.maven.model.ModelWriter;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
- * @goal            relocate-single
+ * @goal            single
  * @requiresProject false
  * @author          mtodorov
  */

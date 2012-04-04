@@ -24,6 +24,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.carlspring.maven.io.ArtifactFilter;
 import org.carlspring.maven.io.PomFilenameFilter;
 import org.carlspring.maven.model.ModelParser;
 import org.carlspring.maven.model.ModelWriter;
@@ -68,6 +69,31 @@ public abstract class AbstractRelocationMojo
     private boolean interactiveMode;
 
     /**
+     * @parameter expression="${originalGAV}"
+     */
+    private String originalGAV;
+
+    /**
+     * @parameter expression="${groupId}"
+     */
+    private String groupId;
+
+    /**
+     * @parameter expression="${artifactId}"
+     */
+    private String artifactId;
+
+    /**
+     * @parameter expression="${version}"
+     */
+    private String version;
+
+    /**
+     * @parameter expression="${relocationGAV}"
+     */
+    private String relocationGAV;
+
+    /**
      * @parameter expression="${relocationGroupId}"
      */
     private String relocationGroupId;
@@ -88,16 +114,6 @@ public abstract class AbstractRelocationMojo
     private String relocationMessage;
 
     /**
-     * @parameter expression="${originalGAV}"
-     */
-    private String originalGAV;
-
-    /**
-     * @parameter expression="${relocationGAV}"
-     */
-    private String relocationGAV;
-
-    /**
      * @parameter expression="${repositoryBaseDir}"
      */
     private String repositoryBaseDir;
@@ -115,7 +131,7 @@ public abstract class AbstractRelocationMojo
         String path = getRepositoryBaseDir() + File.separator;
         path += getGroupId().replaceAll("\\.", File.separator) + File.separator;
         path += getArtifactId() + File.separator;
-        path += getVersion();
+        path += getVersion() != null ? getVersion() : "";
 
         return new File(path).getAbsoluteFile();
     }
@@ -216,14 +232,7 @@ public abstract class AbstractRelocationMojo
         {
             getLog().info("Removing artifact files from " + getOriginalArtifactBasedir().getAbsolutePath() + "...");
 
-            FilenameFilter filter = new FilenameFilter()
-            {
-                @Override
-                public boolean accept(File dir, String name)
-                {
-                    return !name.contains("pom") && !name.contains("backup");
-                }
-            };
+            FilenameFilter filter = new ArtifactFilter();
 
             File[] artifactFiles = getOriginalArtifactBasedir().listFiles(filter);
             for (File artifactFile : artifactFiles){
@@ -382,9 +391,10 @@ public abstract class AbstractRelocationMojo
         }
         else
         {
-            if (relocationVersion == null)
+            final String[] split = relocationGAV.split(":");
+            if (relocationVersion == null && split.length == 3)
             {
-                relocationVersion = relocationGAV.split(":")[2];
+                relocationVersion = split[2];
             }
         }
 
@@ -476,17 +486,44 @@ public abstract class AbstractRelocationMojo
 
     public String getGroupId()
     {
-        return originalGAV.split(":")[0];
+        if (groupId == null)
+            groupId = originalGAV.split(":")[0];
+
+        return groupId;
+    }
+
+    public void setGroupId(String groupId)
+    {
+        this.groupId = groupId;
     }
 
     public String getArtifactId()
     {
-        return originalGAV.split(":")[1];
+        if (artifactId == null)
+            artifactId = originalGAV.split(":")[1];
+
+        return artifactId;
+    }
+
+    public void setArtifactId(String artifactId)
+    {
+        this.artifactId = artifactId;
     }
 
     public String getVersion()
     {
-        return originalGAV.split(":")[2];
+        if (version == null)
+        {
+            final String[] split = originalGAV.split(":");
+            version = split.length >= 3 ? split[2] : null;
+        }
+
+        return version;
+    }
+
+    public void setVersion(String version)
+    {
+        this.version = version;
     }
 
 }

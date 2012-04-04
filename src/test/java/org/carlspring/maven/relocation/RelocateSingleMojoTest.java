@@ -33,11 +33,11 @@ public class RelocateSingleMojoTest
     {
         super.setUp();
 
-        mojo = (RelocateSingleMojo) lookupMojo("relocate-single", POM_PLUGIN);
+        mojo = (RelocateSingleMojo) lookupMojo("single", POM_PLUGIN);
         mojo.setRepositoryBaseDir(DIR_TEST_CLASSES + "/local-repo");
         mojo.setOriginalGAV(ORIGINAL_GAV);
         mojo.setRelocationGAV(RELOCATION_GAV);
-        mojo.setRelocationMessage("The artifact has been relocated from com.foo.bar:zoo:1.1 to com.foo.bars:zoo:1.1.");
+        mojo.setRelocationMessage("The artifact has been relocated from " + ORIGINAL_GAV + " to " + RELOCATION_GAV + ".");
     }
 
     public void testSingleRelocation()

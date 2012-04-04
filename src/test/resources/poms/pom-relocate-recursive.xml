@@ -20,7 +20,7 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>single</goal>
+                            <goal>recursive</goal>
                         </goals>
                     </execution>
                 </executions>

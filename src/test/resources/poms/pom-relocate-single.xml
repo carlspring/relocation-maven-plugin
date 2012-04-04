@@ -20,7 +20,7 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>relocate-single</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
