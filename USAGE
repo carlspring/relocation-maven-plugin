@@ -1,0 +1,19 @@
+
+
+Example usage
+
+Relocating a single artifact
+----------------------------
+    mvn relocate:relocate-single -DrepositoryBaseDir=/path/to/repository  \
+                                 -DoriginalGAV=com.foo.bar:zoo:1.1 \
+                                 -DrelocationGAV=com.foo.bars:zoo:1.1 \
+                                 -DrelocationMessage="The artifact has been relocated from com.foo.bar:zoo:1.1 to com.foo.bars:zoo:1.1."
+
+
+Notes
+-----
+Please, bare in mind that once the artifacts have been relocated:
+- A backup directory is preserved under the root of the original artifact (/path/to/repository/com/foo/bar/zoo/backup).
+- Your artifact repository (Nexus, Artifactory, etc) will need re-indexing for both the original and the relocated directories.
+
+
