@@ -2,4 +2,4 @@
 
 - Add relocation:remove-backups goal.
 - Add relocation:rollback-backups goal.
-
+- Test the interactive mode (highly untested).
