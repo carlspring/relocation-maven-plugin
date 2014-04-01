@@ -129,7 +129,11 @@ public abstract class AbstractRelocationMojo
     public File getOriginalArtifactBasedir()
     {
         String path = getRepositoryBaseDir() + File.separator;
-        path += getGroupId().replaceAll("\\.", File.separator) + File.separator;
+        if (getGroupId().contains("."))
+        {
+            path += getGroupId().replaceAll("\\.", File.separator) + File.separator;
+        }
+        
         path += getArtifactId() + File.separator;
         path += getVersion() != null ? getVersion() : "";
 
